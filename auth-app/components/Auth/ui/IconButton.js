@@ -1,6 +1,8 @@
 import { Pressable, StyleSheet } from 'react-native';
 import { Ionicons } from '@expo/vector-icons';
 
+// 아이콘의 종류 컬러 사이즈는 각 컴포넌트에서 다양하게 사용 될 것이기 때문에
+// 프롭스를 이용해서 아이콘의 속성을 설정하겠다
 function IconButton({ icon, color, size, onPress }) {
   return (
     <Pressable
