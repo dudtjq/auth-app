@@ -16,8 +16,6 @@ const AuthForm = ({ isLogin, onSubmit, credentialsInvalid }) => {
   } = credentialsInvalid;
 
   const updateInputValueHandler = (inputType, enteredValue) => {
-    console.log('inputType', inputType);
-    console.log('enteredValue', enteredValue);
     switch (inputType) {
       case 'email':
         setEnteredEmail(enteredValue);

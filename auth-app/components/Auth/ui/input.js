@@ -12,7 +12,9 @@ const Input = ({
 }) => {
   return (
     <View>
-      <Text style={isInValid && styles.labelInValid}>{label}</Text>
+      <Text style={[styles.label, isInValid && styles.labelInValid]}>
+        {label}
+      </Text>
       <TextInput
         // 스타일 적용이 두개 이상이면 배열로 묶어서 전달 해줘야함
         style={[styles.input, isInValid && styles.inputInValid]}
@@ -31,6 +33,10 @@ export default Input;
 const styles = StyleSheet.create({
   inputContainer: {
     marginVertical: 8,
+  },
+  label: {
+    color: 'white',
+    marginBottom: 4,
   },
   labelInValid: {
     color: Colors.error500,

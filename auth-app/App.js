@@ -2,14 +2,18 @@ import { StatusBar } from 'expo-status-bar';
 import { StyleSheet, Text, View } from 'react-native';
 import AuthForm from './components/Auth/AuthForm';
 import AuthContent from './components/Auth/AuthContent';
-import { createStackNavigator } from '@react-navigation/stack';
 import LoginScreen from './screens/LoginScreen';
 import SignupScreen from './screens/SignupScreen';
 import { Colors } from './constants/styles';
 import { NavigationContainer } from '@react-navigation/native';
+import { createNativeStackNavigator } from '@react-navigation/native-stack';
+import WelcomeScreen from './screens/WelcomeScreen';
+import { useContext } from 'react';
+import AuthContextProvider, { AuthContext } from './store/auth-context';
 
-const Stack = createStackNavigator();
+const Stack = createNativeStackNavigator();
 
+// 아직 인증이 되지 않은 사용자가 보게 될 스택
 const AuthStack = () => {
   return (
     <Stack.Navigator
@@ -18,6 +22,7 @@ const AuthStack = () => {
         headerStyle: { backgroundColor: Colors.primary500 },
         // Header 의 텍스트 , 버튼 색상
         headerTintColor: 'white',
+        contentStyle: { backgroundColor: Colors.primary100 },
       }}
     >
       <Stack.Screen name='Login' component={LoginScreen} />
@@ -26,19 +31,40 @@ const AuthStack = () => {
   );
 };
 
-export default function App() {
+// 인증이 완료된 사용자가 보게 될 스택
+const AuthenticatedStack = () => {
+  return (
+    <Stack.Navigator
+      screenOptions={{
+        headerStyle: { backgroundColor: Colors.primary500 },
+        headerTintColor: 'white',
+        contentStyle: { backgroundColor: Colors.primary100 },
+      }}
+    >
+      <Stack.Screen name='Welcome' component={WelcomeScreen} />
+    </Stack.Navigator>
+  );
+};
+
+const Navigation = () => {
+  const authCtx = useContext(AuthContext);
+  console.log('isLoggedIn : ', authCtx.isLoggedIn);
+
   return (
     <NavigationContainer>
-      <AuthStack />
+      {!authCtx.isLoggedIn && <AuthStack />}
+      {authCtx.isLoggedIn && <AuthenticatedStack />}
     </NavigationContainer>
   );
-}
+};
 
-const styles = StyleSheet.create({
-  container: {
-    flex: 1,
-    backgroundColor: '#fff',
-    alignItems: 'center',
-    justifyContent: 'center',
-  },
-});
+export default function App() {
+  return (
+    <>
+      <StatusBar style='light' />
+      <AuthContextProvider>
+        <Navigation />
+      </AuthContextProvider>
+    </>
+  );
+}
